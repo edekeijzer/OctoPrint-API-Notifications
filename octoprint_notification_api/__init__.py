@@ -19,7 +19,7 @@ class Notification_API(
         )
 
     def on_api_command(self, command, data):
-        import flask
+        self._logger.debug("Command {} was received".format(command))
         if command == "notify":
             if "message" in data:
                 message = data['message']
