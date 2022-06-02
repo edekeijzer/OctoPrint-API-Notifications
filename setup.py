@@ -3,8 +3,8 @@ import setuptools
 
 ########################################################################################################################
 
-plugin_identifier = "notification_api"
-plugin_package = "octoprint_%s" % plugin_identifier
+plugin_identifier = "notifications"
+plugin_package = "octoprint_notification_api"
 plugin_name = "OctoPrint-Notification-API"
 plugin_version = "0.0.1"
 plugin_description = "Adds an API endpoint to OctoPrint to show notifications from external sources"
