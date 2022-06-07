@@ -40,7 +40,7 @@ class Notification_API(
                 # If we did receive a msg_type, it apparently wasn't valid
                 if msg_type:
                     _msg_types = ','.join(_msg_types)
-                    self._logger.warning("Unknown type {}, reverting to 'info'.`nValid types: {}".format(msg_type, _msg_types)
+                    self._logger.warning("Unknown type {}, reverting to 'info'.`nValid types: {}".format(msg_type, _msg_types))
                 msg_type = 'info'
 
             if 'timeout' in data.keys:
