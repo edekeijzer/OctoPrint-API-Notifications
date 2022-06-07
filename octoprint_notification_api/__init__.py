@@ -1,5 +1,6 @@
 # coding=utf-8
 from __future__ import absolute_import
+import json
 
 __author__ = "Erik de Keijzer <erik@fscker.nl>"
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
@@ -21,16 +22,13 @@ class Notification_API(
     def on_api_command(self, command, data):
         self._logger.debug("Command {} was received".format(command))
         if command == "notify":
-            if "message" in data:
-                message = data['message']
-                self._logger.info("{} was called with message {}".format(command,message))
-            else:
-                self._logger.warning("{} was called without a message!".format(command))
-        else:
-            self._logger.warning("Unknown command {}".format(command))
+            message = data['message']
+            self._logger.info("{} was called with message {}".format(command,message))
+            self._plugin_manager.send_plugin_message(self._identifier, dict(type="popup", msg=message))
+
 
     def on_api_get(self, request):
-        return flask.jsonify(foo="bar")
+        return "Usage: POST /api/plugin/notifications {\"command\":\"notify\",\"message\":\"My message\"}"
 
     def get_update_information(self):
         return dict(
