@@ -22,33 +22,33 @@ class Notification_API(
 
     def on_api_command(self, command, data):
         self._logger.debug("Command {} was received".format(command))
-        _msg_types = ['notice','error','info','success']
+        _msg_levels = ['notice','error','info','success']
         if command == "notify":
-            message = data['message']
+            msg_text = data['message']
 
             if 'title' in data.keys():
                 msg_title = data['title']
             else:
                 msg_title = 'Notification'
 
-            msg_type = None
-            # If we received a msg_type, put it in var
+            msg_level = None
+            # If we received a msg_level, put it in var
             if 'type' in data.keys():
-                msg_type = data['type']
+                msg_level = data['type']
             # If our type is None, it won't be in our valid types either
-            if not (msg_type in _msg_types):
-                # If we did receive a msg_type, it apparently wasn't valid
-                if msg_type:
-                    _msg_types = ','.join(_msg_types)
-                    self._logger.warning("Unknown type {}, reverting to 'info'.`nValid types: {}".format(msg_type, _msg_types))
-                msg_type = 'info'
+            if not (msg_level in _msg_levels):
+                # If we did receive a msg_level, it apparently wasn't valid
+                if msg_level:
+                    _msg_levels = ','.join(_msg_levels)
+                    self._logger.warning("Unknown type {}, reverting to 'info'.`nValid types: {}".format(msg_level, _msg_levels))
+                msg_level = 'info'
 
             if 'timeout' in data.keys():
-                msg_timeout = data['timeout']
+                msg_timeout = data['timeout'] * 1000
             else:
                 msg_timeout = 0
             self._logger.info("{} was called with message {}".format(command,message))
-            self._plugin_manager.send_plugin_message(self._identifier, dict(message=message, title=msg_title, type=msg_type, timeout=msg_timeout))
+            self._plugin_manager.send_plugin_message(self._identifier, dict(type='popup', msg_text=msg_text, msg_title=msg_title, level=msg_level, timeout=msg_timeout))
 
 
     def on_api_get(self, request):

@@ -4,12 +4,12 @@ $(function() {
         
         self.onDataUpdaterPluginMessage = function(plugin, data) {
             if (plugin == "NotificationApi") {
-				// console.log(data.msg);
+				console.log(data.messsage);
 				new PNotify({
-					title: data.title,
-					text: data.message,
-					type: data.type,
-					hide: data.timeout
+					title: data.msg_title,
+					text: data.msg_text,
+					type: data.msg_level,
+					delay: data.msg_timeout
 				});
             }
         }
