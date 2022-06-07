@@ -4,15 +4,13 @@ $(function() {
         
         self.onDataUpdaterPluginMessage = function(plugin, data) {
             if (plugin == "NotificationApi") {
-                if(data.type == "popup") {
-                    // console.log(data.msg);
-                    new PNotify({
-                        title: data.title,
-                        text: data.message,
-                        type: data.type,
-                        hide: data.timeout
-                    });
-                }
+				// console.log(data.msg);
+				new PNotify({
+					title: data.title,
+					text: data.message,
+					type: data.type,
+					hide: data.timeout
+				});
             }
         }
         

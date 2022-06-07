@@ -48,7 +48,7 @@ class Notification_API(
             else:
                 msg_timeout = 0
             self._logger.info("{} was called with message {}".format(command,message))
-            self._plugin_manager.send_plugin_message(self._identifier, dict(type="popup", message=message, type=msg_type, timeout=msg_timeout))
+            self._plugin_manager.send_plugin_message(self._identifier, dict(message=message, title=msg_title, type=msg_type, timeout=msg_timeout))
 
 
     def on_api_get(self, request):
