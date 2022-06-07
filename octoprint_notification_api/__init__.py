@@ -54,9 +54,9 @@ class Notification_API(
     def on_api_get(self, request):
         return "Usage: POST /api/plugin/notifications {\"command\":\"notify\",\"message\":\"My message\"}"
 
-	##-- AssetPlugin hooks
-	def get_assets(self):
-		return dict(js=["js/NotificationApi.js"])
+    ##-- AssetPlugin hooks
+    def get_assets(self):
+        return dict(js=["js/NotificationApi.js"])
         
     def get_update_information(self):
         return dict(
