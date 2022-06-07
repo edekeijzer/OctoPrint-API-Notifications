@@ -26,14 +26,14 @@ class Notification_API(
         if command == "notify":
             message = data['message']
 
-            if 'title' in data.keys:
+            if 'title' in data.keys():
                 msg_title = data['title']
             else:
                 msg_title = 'Notification'
 
             msg_type = None
             # If we received a msg_type, put it in var
-            if 'type' in data.keys:
+            if 'type' in data.keys():
                 msg_type = data['type']
             # If our type is None, it won't be in our valid types either
             if not (msg_type in _msg_types):
@@ -43,7 +43,7 @@ class Notification_API(
                     self._logger.warning("Unknown type {}, reverting to 'info'.`nValid types: {}".format(msg_type, _msg_types))
                 msg_type = 'info'
 
-            if 'timeout' in data.keys:
+            if 'timeout' in data.keys():
                 msg_timeout = data['timeout']
             else:
                 msg_timeout = 0
