@@ -25,6 +25,9 @@ class Notification_API(
         _msg_levels = ['notice','error','info','success']
         if command == "notify":
             msg_text = data['message']
+            if not msg_text:
+                self._logger.error("No message text received, unable to continue!")
+                return
 
             if 'title' in data.keys():
                 msg_title = data['title']
@@ -40,21 +43,24 @@ class Notification_API(
                 # If we did receive a msg_level, it apparently wasn't valid
                 if msg_level:
                     _msg_levels = ','.join(_msg_levels)
-                    self._logger.warning("Unknown type {}, reverting to 'info'.`nValid types: {}".format(msg_level, _msg_levels))
+                    self._logger.warning(f"Unknown type {msg_level}, reverting to 'info'.`nValid types: {','.join(_msg_levels)}")
                 msg_level = 'info'
 
             if 'timeout' in data.keys():
-                msg_timeout = data['timeout'] * 1000
+                msg_timeout = data['timeout']
+                if msg_timeout < 1000:
+                    msg_timeout = msg_timeout * 1000
             else:
-                msg_timeout = 0
-            self._logger.info("{} was called with message {}".format(command,message))
-            self._plugin_manager.send_plugin_message(self._identifier, dict(type='popup', msg_text=msg_text, msg_title=msg_title, level=msg_level, timeout=msg_timeout))
+                msg_timeout = 10000
+            self._logger.debug(f"Timeout set to {str(msg_timeout)}")
+            self._logger.info(f"{command} was called with message {msg_text}")
+            self._plugin_manager.send_plugin_message(self._identifier, dict(type='popup', msg_text=msg_text, msg_title=msg_title, msg_level=msg_level, msg_timeout=msg_timeout))
+            self._logger.debug(f"Message sent to {self._identifier}")
 
 
     def on_api_get(self, request):
         return "Usage: POST /api/plugin/notifications {\"command\":\"notify\",\"message\":\"My message\"}"
 
-    ##-- AssetPlugin hooks
     def get_assets(self):
         return dict(js=["js/NotificationApi.js"])
         

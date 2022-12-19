@@ -3,20 +3,21 @@ $(function() {
         var self = this;
         
         self.onDataUpdaterPluginMessage = function(plugin, data) {
-            if (plugin == "NotificationApi") {
-				console.log(data.messsage);
-				new PNotify({
-					title: data.msg_title,
-					text: data.msg_text,
-					type: data.msg_level,
-					delay: data.msg_timeout
-				});
+            if (plugin == "notifications" && data.type == "popup") {
+                // console.log(data.msg);
+                new PNotify({
+                    title: data.msg_title,
+                    text: data.msg_text,
+                    type: data.msg_level,
+                    delay: data.msg_timeout
+                    });
             }
-        }
+        };
         
         self.testPopUp = function(data) {
-            self.onDataUpdaterPluginMessage("NotificationApiPopUp", {'message':'Notification API Pop up message example.','title':'Notification','type':'popup','timeout':10});
-        }
+            self.onDataUpdaterPluginMessage("notifications", {'msg':'Notifications API pop up message example.','type':'popup'});
+        };
+            
     }
 
     // This is how our plugin registers itself with the application, by adding some configuration
