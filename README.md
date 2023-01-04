@@ -10,15 +10,22 @@ or manually using this URL:
 ## Usage
 Generate an API key under ***Application Keys*** in settings and use some method to post a message against the API endpoint ```/api/plugin/notifications```
 
+To post a message:
 Key | Type | Required | Description
 -- | -- | -- | --
-`command` | `string` | `true` | This has to be `notify` or `remove`.
+`command` | `string` | `true` | `notify`
 `message` | `string` | `true` | The message body that will be shown in the pop-up
 `title` | `string` | `false` | The title on the pop-up. Default: Notification
 `type` | `string` | `false` | The type of pop-up message shown. Possible values: `error`, `notice`, `success`, `info`. Default: info
 `timeout` | `int` | `false` | The amount of (milli)seconds after which the message will automatically disappear. A value of 1000 or greater will be interpreted as milliseconds. Default: 10 seconds
 `persist` | `bool` | `false` | Should the message be persisted until explicitly marked as read? Default: false
-`id` | `string` | | Required for remove, optional for notify.
+`id` | `string` | `false` | Only used when persist is true. If omitted, an ID will be generated. The ID will be returned with the POST request.
+
+To remove a persistent message:
+Key | Type | Required | Description
+-- | -- | -- | --
+`command` | `string` | `true` | `remove`
+`id` | `string` | `true` | The message ID to remove from the cache.
 
 ## Persistent notification
 When a message is posted with persist=true, it will be saved in memory until it is removed again. This will make the pop-up reappear each time the UI is reloaded, until the _Mark read_ button is clicked, or otherwise removed through the API.
