@@ -5,7 +5,7 @@ from uuid import uuid1 as uuid
 
 __author__ = "Erik de Keijzer <erik@fscker.nl>"
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
-__copyright__ = "Copyright (C) 2022 Erik de Keijzer - Released under terms of the AGPLv3 License"
+__copyright__ = "Copyright (C) 2024 Erik de Keijzer - Released under terms of the AGPLv3 License"
 
 import octoprint.plugin
 
@@ -47,15 +47,15 @@ class Notification_API(
         msg_id = data['id']
         self._logger.debug(f"Message ID: {msg_id}")
 
-        if 'timeout' in data.keys():
-            msg_timeout = data['timeout']
-            if msg_timeout < 1000:
-                msg_timeout = msg_timeout * 1000
+        if 'delay' in data.keys():
+            msg_delay = data['delay']
+            if msg_delay < 1000:
+                msg_delay = msg_delay * 1000
         else:
-            msg_timeout = 10000
-        self._logger.debug(f"Timeout set to {str(msg_timeout)}")
+            msg_delay = 10000
+        self._logger.debug(f"Delay set to {str(msg_delay)}")
 
-        self._plugin_manager.send_plugin_message(self._identifier, dict(type='popup', msg_id=msg_id, msg_text=msg_text, msg_title=msg_title, msg_level=msg_level, msg_timeout=msg_timeout))
+        self._plugin_manager.send_plugin_message(self._identifier, dict(type='popup', msg_id=msg_id, msg_text=msg_text, msg_title=msg_title, msg_level=msg_level, msg_delay=msg_delay))
         self._logger.debug(f"Message sent to {self._identifier}")
 
     def get_api_commands(self):

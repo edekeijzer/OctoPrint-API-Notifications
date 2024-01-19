@@ -14,7 +14,13 @@ $(function() {
 
         self.onDataUpdaterPluginMessage = function(plugin, data) {
             if (plugin == "notifications" && data.type == "popup") {
-                // console.log(data.msg_text);
+                if (data.msg_delay == 0) {
+                    msg_delay = Infinity;
+                }
+                else {
+                    msg_delay = data.msg_delay;
+                }
+                    
                 if (data.msg_id === "none") {
                     var buttons = [
                         {
@@ -50,7 +56,7 @@ $(function() {
                     title: data.msg_title,
                     text: data.msg_text,
                     type: data.msg_level,
-                    delay: data.msg_timeout,
+                    delay: msg_delay,
                     confirm: {
                         confirm: true,
                         buttons: buttons,
