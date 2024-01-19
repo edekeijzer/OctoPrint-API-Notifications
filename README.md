@@ -16,7 +16,7 @@ Key | Type | Required | Description
 `command` | `string` | `true` | `notify`
 `message` | `string` | `true` | The message body that will be shown in the pop-up
 `title` | `string` | `false` | The title on the pop-up. Default: Notification
-`type` | `string` | `false` | The type of pop-up message shown. Possible values: `error`, `notice`, `success`, `info`. Default: info
+`level` | `string` | `false` | The level of pop-up message shown. Possible values: `error`, `notice`, `success`, `info`. Default: info
 `delay` | `int` | `false` | The amount of (milli)seconds after which the message will automatically disappear. A value of 1000 or greater will be interpreted as milliseconds. Default: 10 seconds
 `persist` | `bool` | `false` | Should the message be persisted until explicitly marked as read? Default: false
 `id` | `string` | `false` | Only used when persist is true. If omitted, an ID will be generated. The ID will be returned with the POST request.
@@ -38,7 +38,7 @@ POST body examples:
     "command": "notify",
     "message": "This is an example of a pop-up message through the notifications API endpoint.",
     "title": "Example",
-    "type": "success",
+    "level": "success",
     "delay": 10,
     "persist": true,
     "id": "my_unique_message_id"
@@ -50,7 +50,7 @@ POST body examples:
     "command": "remove",
     "message": "This is an example of a pop-up message through the notifications API endpoint.",
     "title": "Example",
-    "type": "success",
+    "level": "success",
     "delay": 5
 }
 ```
@@ -60,7 +60,7 @@ A simple example script using curl could look like this:
 #!/bin/sh
 OCTO_HOST='http://localhost:5000'
 API_KEY='myapikey'
-/usr/bin/curl -s -H 'Content-Type: application/json' -H "X-API-Key: ${API_KEY}" -X POST -d "{\"command\":\"notify\",\"message\":\"This is an example of a pop-up message through the notifications API endpoint, which will be overwritten.\",\"title\":\"Example\",\"type\":\"info\",\"delay\":10,\"persist\":true,\"id\":\"example_message\"}" ${OCTO_HOST}/api/plugin/notifications
+/usr/bin/curl -s -H 'Content-Type: application/json' -H "X-API-Key: ${API_KEY}" -X POST -d "{\"command\":\"notify\",\"message\":\"This is an example of a pop-up message through the notifications API endpoint, which will be overwritten.\",\"title\":\"Example\",\"level\":\"info\",\"delay\":10,\"persist\":true,\"id\":\"example_message\"}" ${OCTO_HOST}/api/plugin/notifications
 ```
 
 ## Support
@@ -71,5 +71,4 @@ Please check your logs first. If they do not explain your issue, open an issue i
 - [ ] Add a status panel to send messages to
 
 ## Known issues
-- Setting `delay` to 0 should keep the pop-up on screen infinitely, but instead it instantly disappears.
 - Any delay larger than 10 seconds doesn't seem to be possible.

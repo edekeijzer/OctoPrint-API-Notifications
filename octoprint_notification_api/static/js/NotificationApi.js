@@ -20,29 +20,27 @@ $(function() {
                 else {
                     msg_delay = data.msg_delay;
                 }
-                    
-                if (data.msg_id === "none") {
-                    var buttons = [
-                        {
-                            text: "Mark read",
-                            click: function(notice) {
-                                notice.remove();
-                            }
-                        },
-                        {
-                            text: "Should not be seen",
-                            addClass: "remove_button"
-                        },
-                    ]
+
+                var pnotify_options = {
+                    title: data.msg_title,
+                    text: data.msg_text,
+                    type: data.msg_level,
+                    delay: msg_delay,
+                    before_open: function(notice) {
+                        // Remove the button we don't want
+                        notice.get().find(".remove_button").remove();
+                    },
+                }
+
+                if (data.msg_delay == 0) {
+                    pnotify_options["hide"] = false;
                 }
                 else {
+                    pnotify_options["delay"] = data.msg_delay;
+                }
+
+                if (data.msg_id !== "none") {
                     var buttons = [
-                        {
-                            text: "Later",
-                            click: function(notice) {
-                                notice.remove();
-                            }
-                        },
                         {
                             text: "Mark read",
                             click: function(notice) {
@@ -50,22 +48,20 @@ $(function() {
                                 notice.remove();
                             }
                         },
-                    ]
-                }
-                new PNotify({
-                    title: data.msg_title,
-                    text: data.msg_text,
-                    type: data.msg_level,
-                    delay: msg_delay,
-                    confirm: {
+                        {
+                            text: "Should not be seen",
+                            addClass: "remove_button"
+                        },
+                    ];
+                    var confirm = {
                         confirm: true,
                         buttons: buttons,
-                    },
-                    before_open: function(notice) {
-                        // Remove the button we don't want
-                        notice.get().find(".remove_button").remove();
-                    },
-                });
+                    };
+                    pnotify_options["confirm"] = confirm;
+
+                }
+
+                new PNotify(pnotify_options);
             }
         };
         

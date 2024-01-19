@@ -33,15 +33,15 @@ class Notification_API(
 
         msg_level = None
         # If we received a msg_level, put it in var
-        if 'type' in data.keys():
-            msg_level = data['type']
-        # If our type is None, it won't be in our valid types either
+        if 'level' in data.keys():
+            msg_level = data['level']
+        # If our level is None, it won't be in our valid levels either
         if not (msg_level in msg_levels):
             # If we did receive a msg_level, it apparently wasn't valid
             if msg_level:
-                self._logger.warning(f"Unknown type {msg_level}, reverting to 'info'.`nValid types: {','.join(msg_levels)}")
+                self._logger.warning(f"Unknown level {msg_level}, reverting to 'info'.`nValid levels: {','.join(msg_levels)}")
             else:
-                self._logger.info(f"No type specified, reverting to 'info'.`nValid types: {','.join(msg_levels)}")
+                self._logger.info(f"No level specified, reverting to 'info'.`nValid levels: {','.join(msg_levels)}")
             msg_level = 'info'
 
         msg_id = data['id']
@@ -51,6 +51,8 @@ class Notification_API(
             msg_delay = data['delay']
             if msg_delay < 1000:
                 msg_delay = msg_delay * 1000
+        elif msg_id is not None:
+            msg_delay = 0
         else:
             msg_delay = 10000
         self._logger.debug(f"Delay set to {str(msg_delay)}")
