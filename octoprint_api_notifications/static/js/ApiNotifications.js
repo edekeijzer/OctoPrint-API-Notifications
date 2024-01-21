@@ -1,10 +1,10 @@
 $(function() {
-    function NotificationApiViewModel(parameters) {
+    function ApiNotificationsViewModel(parameters) {
         var self = this;
 
         self.onUserLoggedIn = function(user) {
             $.ajax({
-                url: API_BASEURL + "plugin/notifications",
+                url: API_BASEURL + "plugin/api_notifications",
                 type: "POST",
                 dataType: "json",
                 data: "{\"command\": \"retrieve\"}",
@@ -13,7 +13,7 @@ $(function() {
         };
 
         self.onDataUpdaterPluginMessage = function(plugin, data) {
-            if (plugin == "notifications" && data.type == "popup") {
+            if (plugin == "api_notifications") {
                 if (data.msg_delay == 0) {
                     msg_delay = Infinity;
                 }
@@ -24,7 +24,7 @@ $(function() {
                 var pnotify_options = {
                     title: data.msg_title,
                     text: data.msg_text,
-                    type: data.msg_level,
+                    type: data.msg_type,
                     delay: msg_delay,
                     before_open: function(notice) {
                         // Remove the button we don't want
@@ -67,24 +67,19 @@ $(function() {
         
         self.removeNotification = function(id) {
             $.ajax({
-                url: API_BASEURL + "plugin/notifications",
+                url: API_BASEURL + "plugin/api_notifications",
                 type: "POST",
                 dataType: "json",
                 data: "{\"command\":\"remove\",\"id\":\"" + id + "\"}",
                 contentType: "application/json; charset=UTF-8",
             });            
         }
-
-        self.testPopUp = function(data) {
-            self.onDataUpdaterPluginMessage("notifications", {'msg':'Notifications API pop up message example.','type':'popup'});
-        };
-            
     }
 
     // This is how our plugin registers itself with the application, by adding some configuration
     // information to the global variable OCTOPRINT_VIEWMODELS
     ADDITIONAL_VIEWMODELS.push([
         // This is the constructor to call for instantiating the plugin
-        NotificationApiViewModel
+        ApiNotificationsViewModel
     ]);
 });
