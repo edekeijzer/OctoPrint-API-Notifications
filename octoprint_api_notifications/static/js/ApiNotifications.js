@@ -23,7 +23,9 @@ $(function() {
 
                 var pnotify_options = {
                     title: data.msg_title,
+                    title_escape: true,
                     text: data.msg_text,
+                    text_escape: true,
                     type: data.msg_type,
                     delay: msg_delay,
                     before_open: function(notice) {
