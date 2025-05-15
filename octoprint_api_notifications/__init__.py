@@ -8,6 +8,9 @@ __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agp
 __copyright__ = "Copyright (C) 2024 Erik de Keijzer - Released under terms of the AGPLv3 License"
 
 import octoprint.plugin
+import flask
+from octoprint.access import ADMIN_GROUP, USER_GROUP, READONLY_GROUP
+from octoprint.access.permissions import Permissions
 
 class API_Notifications(
     octoprint.plugin.SimpleApiPlugin,
@@ -71,6 +74,9 @@ class API_Notifications(
         self._logger.debug(f"Command {command} was received")
 
         if command == "notify":
+            if not Permissions.PLUGIN_API_NOTIFICATIONS_NOTIFY.can():
+                return flask.make_response("Insufficient rights", 403)
+            
             if not 'message' in data.keys():
                 self._logger.error("No message text received, unable to continue!")
                 return
@@ -96,10 +102,16 @@ class API_Notifications(
                 return msg_id
 
         elif command == "retrieve":
+            if not Permissions.PLUGIN_API_NOTIFICATIONS_RETRIEVE.can():
+                return flask.make_response("Insufficient rights", 403)
+            
             for key, message in self.cached_notifications.items():
                 self.send_notification(message)
 
         elif command == "remove":
+            if not Permissions.PLUGIN_API_NOTIFICATIONS_REMOVE.can():
+                return flask.make_response("Insufficient rights", 403)
+            
             msg_id = data['id']
             self._logger.debug(f"Remove {msg_id} from persistent cache")
             try:
@@ -115,7 +127,35 @@ class API_Notifications(
 
     def get_assets(self):
         return dict(js=["js/ApiNotifications.js"])
-        
+
+    def get_additional_permissions(self, *args, **kwargs):
+        return [
+            {
+                "key": "NOTIFY",
+                "name": "Send notifications",
+                "description": "Allows sending notifications via Notifications plugin",
+                "roles": ["notify"],
+                "dangerous": False,
+                "default_groups": [ADMIN_GROUP, USER_GROUP],
+            },
+            {
+                "key": "RETRIEVE",
+                "name": "Retrieve notifications",
+                "description": "Allows retrieving notifications via Notifications plugin",
+                "roles": ["retrieve"],
+                "dangerous": False,
+                "default_groups": [ADMIN_GROUP, USER_GROUP, READONLY_GROUP],
+            },
+            {
+                "key": "REMOVE",
+                "name": "Remove notifications",
+                "description": "Allows removing notifications via Notifications plugin",
+                "roles": ["remove"],
+                "dangerous": False,
+                "default_groups": [ADMIN_GROUP, USER_GROUP],
+            }
+        ]
+
     def get_update_information(self):
         return dict(
             notification_api=dict(
@@ -142,5 +182,6 @@ def __plugin_load__():
 
     global __plugin_hooks__
     __plugin_hooks__ = {
-        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
+        "octoprint.access.permissions": __plugin_implementation__.get_additional_permissions
     }
