@@ -7,6 +7,12 @@ or manually using this URL:
 
     https://github.com/edekeijzer/OctoPrint-API-Notifications/archive/main.zip
 
+### Permissions
+Thanks to the work of [Jacopo Tediosi](https://github.com/jacopotediosi) the Notifications API now has support for permissions. Enable the following additional permissions for the account(s) used for notifications:
+* `API Notifications: Send notifications`
+* `API Notifications: Retrieve notifications`
+* `API Notifications: Remove notifications`
+
 ## Usage
 Generate an API key under ***Application Keys*** in settings and use some method to post a message against the API endpoint ```/api/plugin/api_notifications```
 
