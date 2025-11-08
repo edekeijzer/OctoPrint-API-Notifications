@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OctoPrint-API-Notifications"
+version = "0.1.2"
+description = "Adds an API endpoint to OctoPrint to show notifications from external sources"
+authors = [{name = "Erik de Keijzer", email = "erik@fscker.nl"}]
+license = {text = "AGPLv3"}
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = []  # Will be populated from requirements.txt dynamically
+
+[project.urls]
+Homepage = "https://github.com/edekeijzer/OctoPrint-API-Notifications"
+Repository = "https://github.com/edekeijzer/OctoPrint-API-Notifications"
+
+[project.entry-points."octoprint.plugin"]
+api_notifications = "octoprint_api_notifications"
+
+[tool.setuptools]
+packages = ["octoprint_api_notifications"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+octoprint_api_notifications = [
+    "templates/*.jinja2",
+    "static/**/*",
+    "translations/*/*"
+]

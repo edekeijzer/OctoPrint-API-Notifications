@@ -5,7 +5,7 @@ from uuid import uuid1 as uuid
 
 __author__ = "Erik de Keijzer <erik@fscker.nl>"
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
-__copyright__ = "Copyright (C) 2024 Erik de Keijzer - Released under terms of the AGPLv3 License"
+__copyright__ = "Copyright (C) 2025 Erik de Keijzer - Released under terms of the AGPLv3 License"
 
 import octoprint.plugin
 import flask
@@ -23,6 +23,7 @@ class API_Notifications(
     def __init__(self):
         # Add empty storage for caching notifications
         self.cached_notifications = dict()
+
 
     def send_notification(self, data):
         msg_types = ['notice','error','info','success']
@@ -63,12 +64,15 @@ class API_Notifications(
         self._plugin_manager.send_plugin_message(self._identifier, dict(msg_id=msg_id, msg_text=msg_text, msg_title=msg_title, msg_type=msg_type, msg_delay=msg_delay))
         self._logger.debug(f"Message sent to {self._identifier}")
 
+
+    ##~~ SimpleApiPlugin
     def get_api_commands(self):
         return dict(
             notify=["message"],
             retrieve=[],
             remove=["id"],
         )
+
 
     def on_api_command(self, command, data):
         self._logger.debug(f"Command {command} was received")
@@ -122,11 +126,19 @@ class API_Notifications(
             _api_commands = self.get_api_commands()
             self._logger.info(f"Unknown command {command}. Valid commands: {_api_commands.keys()}")
 
+
     def on_api_get(self, request):
         return "/api/plugin/api_notifications only has POST endpoints, please check documentation."
 
+
+    ##~~ AssetPlugin
     def get_assets(self):
         return dict(js=["js/ApiNotifications.js"])
+
+    ##~~ TemplatePlugin
+    def is_template_autoescaped(self):
+        return True
+
 
     def get_additional_permissions(self, *args, **kwargs):
         return [
@@ -156,6 +168,7 @@ class API_Notifications(
             }
         ]
 
+
     def get_update_information(self):
         return dict(
             notification_api=dict(
@@ -172,6 +185,7 @@ class API_Notifications(
                 pip="https://github.com/edekeijzer/OctoPrint-API-Notifications/archive/{target_version}.zip"
             )
         )
+
 
 __plugin_name__ = "API Notifications"
 __plugin_pythoncompat__ = ">=3,<4"
