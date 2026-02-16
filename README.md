@@ -1,3 +1,6 @@
+> [!WARNING]
+> ⚠️ This code is no longer maintained by me, as I'm no longer using OctoPrint for my 3D printer. Feel free to fork and continue development.
+
 # OctoPrint API Notifications
 Adds an API endpoint to OctoPrint to show notifications from external sources
 
@@ -77,4 +80,5 @@ Please check your logs first. If they do not explain your issue, open an issue i
 - [ ] Add a status panel to send messages to
 
 ## Known issues
+
 - Any delay larger than 10 seconds doesn't seem to be possible.
